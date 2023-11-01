@@ -53,7 +53,7 @@ const ContactActionButton = styled.button<ContactActionButtonProps>`
   ${(props) => `${props.info ? "border: 1px solid rgba(204, 186, 49); color: rgba(204, 186, 49);" : ""}`}
 
   :not(:last-child) {
-    margin-right: 0.5rem;
+    margin-right: 1rem;
   }
 `;
 
@@ -64,6 +64,10 @@ const contactNameStyle = css`
   color: var(--primary);
 `;
 
+const contactPhoneStyle = css`
+  margin-bottom: 1rem;
+`;
+
 const ContactList = () => {
   return (
     <Container padded>
@@ -72,13 +76,12 @@ const ContactList = () => {
           <Contact key={val}>
             <div>
               <p css={contactNameStyle}>{val}</p>
-              <p>087788030036</p>
-              <p>favorite</p>
-            </div>
-            <div>
+              <p css={contactPhoneStyle}>087788030036</p>
               <ContactActionButton primary>edit</ContactActionButton>
               <ContactActionButton danger>delete</ContactActionButton>
-              <ContactActionButton info>regular</ContactActionButton>
+            </div>
+            <div>
+              <ContactActionButton info>favorite</ContactActionButton>
             </div>
           </Contact>
         ))}
@@ -86,14 +89,13 @@ const ContactList = () => {
           <Contact key={val}>
             <div>
               <p css={contactNameStyle}>{val}</p>
-              <p>087788030036</p>
-              <p>regular</p>
-            </div>
-            <div>
+              <p css={contactPhoneStyle}>087788030036</p>
               <ContactActionButton primary>edit</ContactActionButton>
               <ContactActionButton danger>delete</ContactActionButton>
-              <ContactActionButton info>favorite</ContactActionButton>
             </div>
+            {/* <div>
+              <ContactActionButton info>regular</ContactActionButton>
+            </div> */}
           </Contact>
         ))}
       </Container>
