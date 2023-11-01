@@ -66,8 +66,8 @@ const contactNameStyle = css`
 
 const ContactList = () => {
   return (
-    <Container>
-      <Container padded>
+    <Container padded>
+      <Container>
         {Array.from(Array(5).keys()).map((val) => (
           <Contact key={val}>
             <div>
