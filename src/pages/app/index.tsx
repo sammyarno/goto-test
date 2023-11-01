@@ -1,17 +1,35 @@
-import "./index.css";
+import styled from "@emotion/styled";
+
+const Container = styled.div`
+  @media (max-width: 576px) {
+    max-width: 540px;
+  }
+
+  @media (min-width: 577px) and (max-width: 768px) {
+    max-width: 720px;
+  }
+
+  @media (min-width: 769px) and (max-width: 992px) {
+    max-width: 960px;
+  }
+
+  @media (min-width: 993px) and (max-width: 1200px) {
+    max-width: 1140px;
+  }
+
+  @media (min-width: 1201px) {
+    max-width: 1200px;
+  }
+
+  width: 100%;
+  margin: 0 auto;
+`;
 
 const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container className="app">
+      <h1>Test Index</h1>
+    </Container>
   );
 };
 
