@@ -10,6 +10,12 @@ const Navbar = styled.div`
   justify-content: space-between;
 `;
 
+const InputContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const SearchButton = styled.button`
   border: none;
   border-radius: 0.25rem;
@@ -46,11 +52,11 @@ const NavigationBar = () => {
 
   return (
     <Navbar>
-      <h2 css={logoStyle}>Contact List</h2>
-      <div>
+      <h1 css={logoStyle}>Contact List</h1>
+      <InputContainer>
         <SearchInput type="text" value={searchQuery} onChange={handleSearchQuery} />
         <SearchButton onClick={handleSearch}>Search</SearchButton>
-      </div>
+      </InputContainer>
     </Navbar>
   );
 };
