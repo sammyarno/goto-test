@@ -1,79 +1,48 @@
 /** @jsxImportSource @emotion/react */
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useEffect } from "react";
 import { ActionButton, Container } from "../shared";
-import { Params } from "../../models/request";
 import { useContact } from "../../contexts/contact";
 import { Contact, PaginationButton, PaginationContainer, contactNameStyle, contactPhoneStyle } from "./styles";
 import Filter from "../filter";
 
-const defaultParams: Params = {
-  offset: 0,
-  limit: 10,
-  where: null,
-};
-
-const defaultPaginationStatus = {
-  ablePrev: false,
-  ableNext: true,
-};
-
 const ContactList = () => {
-  const [params, setParams] = useState(defaultParams);
-  const [paginationStatus, setPaginationStatus] = useState(defaultPaginationStatus);
-  const { getContacts, contacts, getLoading } = useContact();
+  const { getContacts, contacts, getLoading, handlePagination, params, deleteContact, deleteLoading } = useContact();
 
-  const getList = (newParams = {}) => {
-    const tempParams = {
-      ...params,
-      ...newParams,
-    };
-
-    getContacts(tempParams);
-
-    setParams((prev) => ({ ...prev, ...tempParams }));
-    setPaginationStatus(defaultPaginationStatus);
+  const handlePaginationChange = (e: MouseEvent<HTMLButtonElement>, type = "") => {
+    e.preventDefault();
+    handlePagination(type);
   };
 
-  const handlePagination = (e: MouseEvent<HTMLButtonElement>, type = "") => {
+  const handleSearchFilter = (where: object) => {
+    getContacts({
+      ...params,
+      where,
+    });
+  };
+
+  const handleDeleteContact = (e: MouseEvent<HTMLButtonElement>, id: string) => {
     e.preventDefault();
-    let newOffset = 0;
-
-    switch (type) {
-      case "NEXT":
-        newOffset = params.offset + params.limit;
-        break;
-      case "PREV":
-        newOffset = params.offset - params.limit;
-
-        if (newOffset < 0) {
-          newOffset = 0;
-        }
-        break;
-      default:
-        break;
-    }
-
-    setParams((prev) => ({
-      ...prev,
-      offset: newOffset,
-    }));
+    deleteContact(id);
   };
 
   useEffect(() => {
-    getList();
+    getContacts();
   }, []);
 
-  if (getLoading)
+  if (getLoading) {
     return (
       <center>
         <h2>Loading your data...</h2>
       </center>
     );
+  }
 
-  if (contacts)
+  const actionLoading = deleteLoading;
+
+  if (contacts) {
     return (
       <Container padded>
-        <Filter onSearch={getList} />
+        <Filter onSearch={handleSearchFilter} />
         <Container>
           {/* FAV CONTACTS */}
           {/* {Array.from(Array(5).keys()).map((val) => (
@@ -94,8 +63,12 @@ const ContactList = () => {
               <div>
                 <p css={contactNameStyle}>{`${contact.first_name} ${contact.last_name}`}</p>
                 <p css={contactPhoneStyle}>{contact.phones.map((phone) => phone.number).join(" / ")}</p>
-                <ActionButton primary>edit</ActionButton>
-                <ActionButton danger>delete</ActionButton>
+                <ActionButton primary disabled={actionLoading}>
+                  edit
+                </ActionButton>
+                <ActionButton danger disabled={actionLoading} onClick={(e) => handleDeleteContact(e, `${contact.id}`)}>
+                  delete
+                </ActionButton>
               </div>
               <div>
                 <ActionButton secondary>regular</ActionButton>
@@ -104,15 +77,14 @@ const ContactList = () => {
           ))}
         </Container>
         <PaginationContainer>
-          <PaginationButton disabled={!paginationStatus.ablePrev} onClick={(e) => handlePagination(e, "PREV")}>
+          <PaginationButton disabled={params.offset === 0} onClick={(e) => handlePaginationChange(e, "PREV")}>
             prev
           </PaginationButton>
-          <PaginationButton disabled={!paginationStatus.ableNext} onClick={(e) => handlePagination(e, "NEXT")}>
-            next
-          </PaginationButton>
+          <PaginationButton onClick={(e) => handlePaginationChange(e, "NEXT")}>next</PaginationButton>
         </PaginationContainer>
       </Container>
     );
+  }
 
   return <></>;
 };

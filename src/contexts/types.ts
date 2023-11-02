@@ -4,14 +4,18 @@ import { Params } from "../models/request";
 import { NewContact } from "../pages/add-contact/types";
 
 export type ContactContextType = {
+  getContacts: (params?: Params) => void;
+  getLoading: boolean;
   contacts: CustomContact[];
+  params: Params;
+  handlePagination: (type: string) => void;
+  addContact: (contact: NewContact) => void;
+  postLoading: boolean;
   addContactResponse: unknown;
   addContactError: ApolloError | undefined;
   addContactReset: () => void;
-  getLoading: boolean;
-  postLoading: boolean;
-  addContact: (contact: NewContact) => void;
-  getContacts: (params: Params) => void;
+  deleteContact: (id: string) => void;
+  deleteLoading: boolean;
 };
 
 export type CustomContact = Contact & {

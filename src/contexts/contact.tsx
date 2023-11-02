@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { OperationVariables, useLazyQuery, useMutation } from "@apollo/client";
-import { ADD_CONTACT, GET_CONTACT_LIST } from "../utils/queries";
+import { ADD_CONTACT, DELETE_CONTACT, GET_CONTACT_LIST } from "../utils/queries";
 import { Params } from "../models/request";
 import { ContactContextType, ContactListResponse, CustomContact, Props } from "./types";
 import { NewContact } from "../pages/add-contact/types";
@@ -17,33 +17,87 @@ export const useContact = () => {
   return ctx;
 };
 
+const defaultParams: Params = {
+  offset: 0,
+  limit: 10,
+  where: null,
+};
+
 const ContactProvider = (props: Props) => {
   const { children } = props;
+  const [params, setParams] = useState<Params>(defaultParams);
   const [contacts, setContacts] = useState<CustomContact[]>([]);
-  const [getContacts, { loading: getLoading, data }] = useLazyQuery<ContactListResponse, OperationVariables>(
-    GET_CONTACT_LIST,
-  );
+  const [getContacts, { loading: getLoading, data, refetch: refetchContacts }] = useLazyQuery<
+    ContactListResponse,
+    OperationVariables
+  >(GET_CONTACT_LIST);
   const [
     addContact,
     { data: addContactResponse, loading: postLoading, error: addContactError, reset: addContactReset },
   ] = useMutation(ADD_CONTACT);
+  const [deleteContact, { loading: deleteLoading }] = useMutation(DELETE_CONTACT);
 
-  const handleGetContacts = (params: Params) => {
-    if (!params.where) {
-      delete params.where;
+  const handlePagination = (type = "") => {
+    let newOffset = 0;
+
+    switch (type) {
+      case "NEXT":
+        newOffset = params.offset + params.limit;
+        break;
+      case "PREV":
+        newOffset = params.offset - params.limit;
+
+        if (newOffset < 0) {
+          newOffset = 0;
+        }
+        break;
+      default:
+        break;
+    }
+
+    setParams((prev) => ({
+      ...prev,
+      offset: newOffset,
+    }));
+
+    handleGetContacts({
+      ...params,
+      offset: newOffset,
+    });
+  };
+
+  const handleGetContacts = (newParams?: Params) => {
+    const tempParams = {
+      ...params,
+      ...newParams,
+    };
+
+    if (!tempParams.where) {
+      delete tempParams.where;
     }
 
     getContacts({
       variables: {
-        ...params,
+        ...tempParams,
         order_by: { created_at: "desc" },
       },
     });
+
+    setParams((prev) => ({ ...prev, ...tempParams }));
   };
 
   const handleAddContact = (contact: NewContact) => {
     addContact({
       variables: contact,
+    });
+  };
+
+  const handleDeleteContact = (id: string) => {
+    deleteContact({
+      variables: {
+        id,
+      },
+      onCompleted: () => refetchContacts({ ...params }),
     });
   };
 
@@ -62,11 +116,15 @@ const ContactProvider = (props: Props) => {
     getContacts: handleGetContacts,
     getLoading,
     contacts,
+    params,
+    handlePagination,
     addContact: handleAddContact,
+    postLoading,
     addContactResponse,
     addContactError,
     addContactReset,
-    postLoading,
+    deleteContact: handleDeleteContact,
+    deleteLoading,
   };
 
   return <ContactContext.Provider value={value}>{children}</ContactContext.Provider>;
