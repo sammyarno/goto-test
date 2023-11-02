@@ -2,9 +2,9 @@
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { MouseEvent, useEffect, useState } from "react";
-import { OperationVariables, useLazyQuery } from "@apollo/client";
 import { Container } from "../shared";
-import { GET_CONTACT_LIST } from "../../utils/queries";
+import { Params } from "../../models/pagination";
+import { useContact } from "../../contexts/contact";
 
 type ContactActionButtonProps = {
   danger?: boolean;
@@ -74,39 +74,17 @@ const contactPhoneStyle = css`
   margin-bottom: 1rem;
 `;
 
-const defaultParams = {
+const defaultParams: Params = {
   offset: 0,
   limit: 10,
 };
 
-interface ContactPhone {
-  id: number;
-  contact_id: string;
-  created_ad: string;
-  number: string;
-}
-
-interface Contact {
-  id: number;
-  first_name: string;
-  last_name: string;
-  created_at: string;
-  updated_at: string;
-  phones: ContactPhone[];
-}
-
-interface ContactList {
-  contact: Contact[];
-}
-
-const ContactList = () => {
+const Contacts = () => {
   const [params, setParams] = useState(defaultParams);
-  const [getContacts, { loading, data }] = useLazyQuery<ContactList, OperationVariables>(GET_CONTACT_LIST, {
-    variables: params,
-  });
+  const { getContacts, contacts, loading } = useContact();
 
   useEffect(() => {
-    getContacts();
+    getContacts(defaultParams);
   }, []);
 
   const handlePagination = (e: MouseEvent<HTMLButtonElement>, type = "") => {
@@ -136,7 +114,7 @@ const ContactList = () => {
 
   if (loading) return <h2>Loading your data...</h2>;
 
-  if (data)
+  if (contacts)
     return (
       <Container padded>
         <Container>
@@ -154,7 +132,7 @@ const ContactList = () => {
               </div>
             </Contact>
           ))} */}
-          {data.contact.map((contact) => (
+          {contacts.map((contact) => (
             <Contact key={contact.id}>
               <div>
                 <p css={contactNameStyle}>{`${contact.first_name} ${contact.last_name}`}</p>
@@ -180,4 +158,4 @@ const ContactList = () => {
   return <></>;
 };
 
-export default ContactList;
+export default Contacts;
