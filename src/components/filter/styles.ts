@@ -7,14 +7,6 @@ export const InputContainer = styled.div`
   align-items: center;
 `;
 
-export const SearchButton = styled.button`
-  border: none;
-  border-radius: 0.25rem;
-  background-color: var(--primary);
-  padding: 0.25rem 0.75rem;
-  text-transform: uppercase;
-`;
-
 export const SearchInput = styled.input`
   margin-right: 1rem;
   padding: 0.25rem 0.75rem;
@@ -24,14 +16,6 @@ export const SearchInput = styled.input`
   :focus {
     outline: none;
   }
-`;
-
-export const AddButton = styled.button`
-  border-radius: 0.25rem;
-  text-transform: uppercase;
-  padding: 0.25rem 0.75rem;
-  border: none;
-  background-color: var(--primary);
 `;
 
 export const containerStyle = css`

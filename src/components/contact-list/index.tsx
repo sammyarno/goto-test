@@ -1,16 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { MouseEvent, useEffect, useState } from "react";
-import { Container } from "../shared";
+import { ActionButton, Container } from "../shared";
 import { Params } from "../../models/request";
 import { useContact } from "../../contexts/contact";
-import {
-  Contact,
-  ContactActionButton,
-  PaginationButton,
-  PaginationContainer,
-  contactNameStyle,
-  contactPhoneStyle,
-} from "./styles";
+import { Contact, PaginationButton, PaginationContainer, contactNameStyle, contactPhoneStyle } from "./styles";
 import Filter from "../filter";
 
 const defaultParams: Params = {
@@ -88,11 +81,11 @@ const ContactList = () => {
               <div>
                 <p css={contactNameStyle}>{val}</p>
                 <p css={contactPhoneStyle}>087788030036</p>
-                <ContactActionButton primary>edit</ContactActionButton>
-                <ContactActionButton danger>delete</ContactActionButton>
+                <ActionButton primary>edit</ActionButton>
+                <ActionButton danger>delete</ActionButton>
               </div>
               <div>
-                <ContactActionButton favorite>favorite</ContactActionButton>
+                <ActionButton favorite>favorite</ActionButton>
               </div>
             </Contact>
           ))} */}
@@ -101,11 +94,11 @@ const ContactList = () => {
               <div>
                 <p css={contactNameStyle}>{`${contact.first_name} ${contact.last_name}`}</p>
                 <p css={contactPhoneStyle}>{contact.phones.map((phone) => phone.number).join(" / ")}</p>
-                <ContactActionButton primary>edit</ContactActionButton>
-                <ContactActionButton danger>delete</ContactActionButton>
+                <ActionButton primary>edit</ActionButton>
+                <ActionButton danger>delete</ActionButton>
               </div>
               <div>
-                <ContactActionButton regular>regular</ContactActionButton>
+                <ActionButton regular>regular</ActionButton>
               </div>
             </Contact>
           ))}

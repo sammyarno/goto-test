@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { ContactActionButtonProps } from "./types";
 import { css } from "@emotion/react";
 
 export const Contact = styled.div`
@@ -29,26 +28,6 @@ export const PaginationButton = styled.button`
 
   :hover {
     cursor: ${(props) => (props.disabled ? "default" : "pointer")};
-  }
-`;
-
-export const ContactActionButton = styled.button<ContactActionButtonProps>`
-  padding: 0.25rem 0.75rem;
-  text-transform: uppercase;
-  font-weight: bold;
-  background-color: transparent;
-  border: none;
-  border-radius: 0.25rem;
-  letter-spacing: 1px;
-
-  ${(props) => `${props.primary ? "border: 1px solid var(--primary); color: var(--primary);" : ""}`}
-  ${(props) => `${props.danger ? "border: 1px solid rgba(189, 42, 54); color: rgba(189, 42, 54);" : ""}`}
-  
-  ${(props) => `${props.favorite ? "border: 1px solid rgba(44, 150, 171); color: rgba(44, 150, 171);" : ""}`}
-  ${(props) => `${props.regular ? "border: 1px solid dimgray; color: dimgray;" : ""}`}
-
-  :not(:last-child) {
-    margin-right: 1rem;
   }
 `;
 

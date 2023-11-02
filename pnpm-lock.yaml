@@ -12,6 +12,7 @@ dependencies:
   graphql: 16.8.1
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-router-dom: 6.18.0_react-dom@18.2.0+react@18.2.0
   react-scripts: 5.0.1_react@18.2.0+typescript@4.9.5
   typescript: 4.9.5
   web-vitals: 2.1.4
@@ -2331,6 +2332,12 @@ packages:
         optional: true
     resolution:
       integrity: sha512-7j/6vdTym0+qZ6u4XbSAxrWBGYSdCfTzySkj7WAFgDLmSyWlOrWvpyzxlFh5jtw9dn0oL/jtW+06XfFiisN3JQ==
+  /@remix-run/router/1.11.0:
+    dev: false
+    engines:
+      node: '>=14.0.0'
+    resolution:
+      integrity: sha512-BHdhcWgeiudl91HvVa2wxqZjSHbheSgIiDvxrF1VjFzBzpTtuDPkOdOi3Iqvc08kXtFkLjhbS+ML9aM8mJS+wQ==
   /@rollup/plugin-babel/5.3.1_@babel+core@7.23.2+rollup@2.79.1:
     dependencies:
       '@babel/core': 7.23.2_@babel+core@7.23.2
@@ -9140,6 +9147,31 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
+  /react-router-dom/6.18.0_react-dom@18.2.0+react@18.2.0:
+    dependencies:
+      '@remix-run/router': 1.11.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-router: 6.18.0_react@18.2.0
+    dev: false
+    engines:
+      node: '>=14.0.0'
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    resolution:
+      integrity: sha512-Ubrue4+Ercc/BoDkFQfc6og5zRQ4A8YxSO3Knsne+eRbZ+IepAsK249XBH/XaFuOYOYr3L3r13CXTLvYt5JDjw==
+  /react-router/6.18.0_react@18.2.0:
+    dependencies:
+      '@remix-run/router': 1.11.0
+      react: 18.2.0
+    dev: false
+    engines:
+      node: '>=14.0.0'
+    peerDependencies:
+      react: '>=16.8'
+    resolution:
+      integrity: sha512-vk2y7Dsy8wI02eRRaRmOs9g2o+aE72YCx5q9VasT1N9v+lrdB79tIqrjMfByHiY5+6aYkH2rUa5X839nwWGPDg==
   /react-scripts/5.0.1_react@18.2.0+typescript@4.9.5:
     dependencies:
       '@babel/core': 7.23.2_@babel+core@7.23.2
@@ -11243,6 +11275,7 @@ specifiers:
   prettier: ^3.0.3
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-router-dom: ^6.18.0
   react-scripts: 5.0.1
   typescript: ^4.9.5
   web-vitals: ^2.1.4

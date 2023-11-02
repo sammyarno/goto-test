@@ -1,8 +1,9 @@
 import { createRoot } from "react-dom/client";
-import App from "./pages/app";
 import reportWebVitals from "./reportWebVitals";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import "./index.css";
+import Router from "./components/routes";
+import ContactProvider from "./contexts/contact";
 
 const root = createRoot(document.getElementById("root") as HTMLElement);
 
@@ -13,7 +14,9 @@ const client = new ApolloClient({
 
 root.render(
   <ApolloProvider client={client}>
-    <App />
+    <ContactProvider>
+      <Router />
+    </ContactProvider>
   </ApolloProvider>,
 );
 

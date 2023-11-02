@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = styled.div`
   border-bottom: 1px solid var(--accent);
@@ -15,9 +16,13 @@ const logoStyle = css`
 `;
 
 const NavigationBar = () => {
+  const navigate = useNavigate();
+
   return (
     <Navbar>
-      <h1 css={logoStyle}>Contact List</h1>
+      <h1 css={logoStyle} onClick={() => navigate("/")}>
+        Contact List
+      </h1>
     </Navbar>
   );
 };
