@@ -55,7 +55,7 @@ export const ContactActionButton = styled.button<ContactActionButtonProps>`
 export const contactNameStyle = css`
   font-weight: bold;
   font-size: 1.3rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   color: var(--primary);
 `;
 

@@ -1,7 +1,5 @@
 export interface ContactPhone {
   id: number;
-  contact_id: string;
-  created_ad: string;
   number: string;
 }
 

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { MouseEvent, useEffect, useState } from "react";
 import { Container } from "../shared";
-import { Params } from "../../models/pagination";
+import { Params } from "../../models/request";
 import { useContact } from "../../contexts/contact";
 import {
   Contact,
@@ -11,10 +11,12 @@ import {
   contactNameStyle,
   contactPhoneStyle,
 } from "./styles";
+import Filter from "../filter";
 
 const defaultParams: Params = {
   offset: 0,
   limit: 10,
+  where: null,
 };
 
 const defaultPaginationStatus = {
@@ -22,15 +24,22 @@ const defaultPaginationStatus = {
   ableNext: true,
 };
 
-const Contacts = () => {
+const ContactList = () => {
   const [params, setParams] = useState(defaultParams);
   const [paginationStatus, setPaginationStatus] = useState(defaultPaginationStatus);
   const { getContacts, contacts, loading } = useContact();
 
-  useEffect(() => {
-    getContacts(defaultParams);
+  const getList = (newParams = {}) => {
+    const tempParams = {
+      ...params,
+      ...newParams,
+    };
+
+    getContacts(tempParams);
+
+    setParams((prev) => ({ ...prev, ...tempParams }));
     setPaginationStatus(defaultPaginationStatus);
-  }, []);
+  };
 
   const handlePagination = (e: MouseEvent<HTMLButtonElement>, type = "") => {
     e.preventDefault();
@@ -57,11 +66,21 @@ const Contacts = () => {
     }));
   };
 
-  if (loading) return <h2>Loading your data...</h2>;
+  useEffect(() => {
+    getList();
+  }, []);
+
+  if (loading)
+    return (
+      <center>
+        <h2>Loading your data...</h2>
+      </center>
+    );
 
   if (contacts)
     return (
       <Container padded>
+        <Filter onSearch={getList} />
         <Container>
           {/* FAV CONTACTS */}
           {/* {Array.from(Array(5).keys()).map((val) => (
@@ -77,11 +96,11 @@ const Contacts = () => {
               </div>
             </Contact>
           ))} */}
-          {contacts.map((contact) => (
-            <Contact key={contact.id}>
+          {contacts.map((contact, index) => (
+            <Contact key={`${contact.id}|${index}`}>
               <div>
                 <p css={contactNameStyle}>{`${contact.first_name} ${contact.last_name}`}</p>
-                <p css={contactPhoneStyle}>{contact.phones[0].number}</p>
+                <p css={contactPhoneStyle}>{contact.phones.map((phone) => phone.number).join(" / ")}</p>
                 <ContactActionButton primary>edit</ContactActionButton>
                 <ContactActionButton danger>delete</ContactActionButton>
               </div>
@@ -105,4 +124,4 @@ const Contacts = () => {
   return <></>;
 };
 
-export default Contacts;
+export default ContactList;

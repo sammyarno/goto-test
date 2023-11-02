@@ -1,23 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { Contact } from "../models/contact";
 import { OperationVariables, useLazyQuery } from "@apollo/client";
 import { GET_CONTACT_LIST } from "../utils/queries";
-import { Params } from "../models/pagination";
-
-type ContactContextType = {
-  contacts: Contact[];
-  loading: boolean;
-  addContact: (contact: Contact) => void;
-  getContacts: (params: Params) => void;
-};
-
-type ContactListResponse = {
-  contact: Contact[];
-};
-
-type Props = {
-  children?: JSX.Element | JSX.Element[];
-};
+import { Params } from "../models/request";
+import { ContactContextType, ContactListResponse, CustomContact, Props } from "./types";
 
 export const ContactContext = createContext<ContactContextType | null>(null);
 
@@ -33,23 +18,32 @@ export const useContact = () => {
 
 const ContactProvider = (props: Props) => {
   const { children } = props;
-  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contacts, setContacts] = useState<CustomContact[]>([]);
   const [getContacts, { loading, data }] = useLazyQuery<ContactListResponse, OperationVariables>(GET_CONTACT_LIST);
 
   const handleGetContacts = (params: Params) => {
+    if (!params.where) {
+      delete params.where;
+    }
+
     getContacts({
       variables: params,
     });
   };
 
-  const handleAddContact = (contact: Contact) => {
+  const handleAddContact = (contact: CustomContact) => {
     console.log(contact);
     setContacts((prev) => [...prev, contact]);
   };
 
   useEffect(() => {
     if (data?.contact) {
-      setContacts((prev) => [...prev, ...data.contact]);
+      const tempContacts = data.contact.map((x) => ({
+        ...x,
+        isFav: false,
+      }));
+
+      setContacts([...tempContacts]);
     }
   }, [data]);
 
