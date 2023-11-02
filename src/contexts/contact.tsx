@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { OperationVariables, useLazyQuery } from "@apollo/client";
-import { GET_CONTACT_LIST } from "../utils/queries";
+import { OperationVariables, useLazyQuery, useMutation } from "@apollo/client";
+import { ADD_CONTACT, GET_CONTACT_LIST } from "../utils/queries";
 import { Params } from "../models/request";
 import { ContactContextType, ContactListResponse, CustomContact, Props } from "./types";
+import { NewContact } from "../pages/add-contact/types";
 
 export const ContactContext = createContext<ContactContextType | null>(null);
 
@@ -19,7 +20,13 @@ export const useContact = () => {
 const ContactProvider = (props: Props) => {
   const { children } = props;
   const [contacts, setContacts] = useState<CustomContact[]>([]);
-  const [getContacts, { loading, data }] = useLazyQuery<ContactListResponse, OperationVariables>(GET_CONTACT_LIST);
+  const [getContacts, { loading: getLoading, data }] = useLazyQuery<ContactListResponse, OperationVariables>(
+    GET_CONTACT_LIST,
+  );
+  const [
+    addContact,
+    { data: addContactResponse, loading: postLoading, error: addContactError, reset: addContactReset },
+  ] = useMutation(ADD_CONTACT);
 
   const handleGetContacts = (params: Params) => {
     if (!params.where) {
@@ -27,13 +34,17 @@ const ContactProvider = (props: Props) => {
     }
 
     getContacts({
-      variables: params,
+      variables: {
+        ...params,
+        order_by: { created_at: "desc" },
+      },
     });
   };
 
-  const handleAddContact = (contact: CustomContact) => {
-    console.log(contact);
-    setContacts((prev) => [...prev, contact]);
+  const handleAddContact = (contact: NewContact) => {
+    addContact({
+      variables: contact,
+    });
   };
 
   useEffect(() => {
@@ -48,10 +59,14 @@ const ContactProvider = (props: Props) => {
   }, [data]);
 
   const value = {
-    contacts,
-    loading,
-    addContact: handleAddContact,
     getContacts: handleGetContacts,
+    getLoading,
+    contacts,
+    addContact: handleAddContact,
+    addContactResponse,
+    addContactError,
+    addContactReset,
+    postLoading,
   };
 
   return <ContactContext.Provider value={value}>{children}</ContactContext.Provider>;

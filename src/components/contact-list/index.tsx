@@ -20,7 +20,7 @@ const defaultPaginationStatus = {
 const ContactList = () => {
   const [params, setParams] = useState(defaultParams);
   const [paginationStatus, setPaginationStatus] = useState(defaultPaginationStatus);
-  const { getContacts, contacts, loading } = useContact();
+  const { getContacts, contacts, getLoading } = useContact();
 
   const getList = (newParams = {}) => {
     const tempParams = {
@@ -63,7 +63,7 @@ const ContactList = () => {
     getList();
   }, []);
 
-  if (loading)
+  if (getLoading)
     return (
       <center>
         <h2>Loading your data...</h2>

@@ -1,10 +1,16 @@
+import { ApolloError } from "@apollo/client";
 import { Contact } from "../models/contact";
 import { Params } from "../models/request";
+import { NewContact } from "../pages/add-contact/types";
 
 export type ContactContextType = {
   contacts: CustomContact[];
-  loading: boolean;
-  addContact: (contact: CustomContact) => void;
+  addContactResponse: unknown;
+  addContactError: ApolloError | undefined;
+  addContactReset: () => void;
+  getLoading: boolean;
+  postLoading: boolean;
+  addContact: (contact: NewContact) => void;
   getContacts: (params: Params) => void;
 };
 

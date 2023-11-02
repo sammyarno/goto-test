@@ -1,11 +1,5 @@
 import styled from "@emotion/styled";
-import { ActionButtonProps } from "./types";
-
-type ContainerProps = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  padded?: boolean;
-  style?: string;
-};
+import { ActionButtonProps, ContainerProps, MessageInfoProps } from "./types";
 
 export const Container = styled.div<ContainerProps>`
   @media (max-width: 576px) {
@@ -56,4 +50,32 @@ export const ActionButton = styled.button<ActionButtonProps>`
   :not(:last-child) {
     margin-right: 1rem;
   }
+`;
+
+export const MessageInfo = styled.span<MessageInfoProps>`
+  border-radius: 0.25rem;
+  margin-right: 1rem;
+  padding: 0.25rem 0.75rem;
+
+  ${(props) =>
+    `${
+      props.type === "DANGER"
+        ? `
+    background-color: rgba(189, 42, 54, 0.3);
+    border: 1px solid rgba(189, 42, 54, 0.8);
+    color: rgba(189, 42, 54);
+  `
+        : ""
+    }`};
+
+  ${(props) =>
+    `${
+      props.type === "SUCCESS"
+        ? `
+    background-color: rgba(50, 168, 82, 0.3);
+    border: 1px solid rgba(50, 168, 82, 0.8);
+    color: rgba(50, 168, 82);
+  `
+        : ""
+    }`};
 `;

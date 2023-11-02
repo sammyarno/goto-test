@@ -1,8 +1,10 @@
 import NavigationBar from "../../components/navigation-bar";
-import { ActionButton, Container } from "../../components/shared";
-import { ChangeEvent, MouseEvent, useState } from "react";
+import { ActionButton, Container, MessageInfo } from "../../components/shared";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { NewContact } from "./types";
 import { Input, RowInput, Title } from "./styles";
+import { useContact } from "../../contexts/contact";
+import { Message } from "../../models";
 
 const defaultPhone = {
   number: "",
@@ -14,8 +16,15 @@ const defaultNewContact: NewContact = {
   phones: [{ ...defaultPhone }],
 };
 
+const defaultMessage: Message = {
+  text: "",
+  type: "SUCCESS",
+};
+
 const AddContact = () => {
   const [newContact, setNewContact] = useState(defaultNewContact);
+  const [message, setMessage] = useState(defaultMessage);
+  const { postLoading, addContact, addContactError, addContactReset, addContactResponse } = useContact();
 
   const handleInputUpdate = (e: ChangeEvent<HTMLInputElement>, key: string) => {
     setNewContact((prev) => ({
@@ -54,11 +63,39 @@ const AddContact = () => {
     }));
   };
 
-  const handleSave = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleSave = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    console.log(newContact);
+    if (newContact.first_name && newContact.last_name && newContact.phones.length > 0) {
+      await addContact(newContact);
+    }
   };
+
+  useEffect(() => {
+    addContactReset();
+  }, []);
+
+  useEffect(() => {
+    if (addContactResponse) {
+      setMessage((prev) => ({
+        ...prev,
+        text: `Success adding ${newContact.first_name} ${newContact.last_name}`,
+        type: "SUCCESS",
+      }));
+
+      setNewContact({ ...defaultNewContact });
+    }
+  }, [addContactResponse]);
+
+  useEffect(() => {
+    if (addContactError) {
+      setMessage((prev) => ({
+        ...prev,
+        text: addContactError.message || "",
+        type: "DANGER",
+      }));
+    }
+  }, [addContactError]);
 
   return (
     <Container className="app">
@@ -71,12 +108,14 @@ const AddContact = () => {
             placeholder="first name"
             value={newContact.first_name}
             onChange={(e) => handleInputUpdate(e, "first_name")}
+            disabled={postLoading}
           />
           <Input
             type="text"
             placeholder="last name"
             value={newContact.last_name}
             onChange={(e) => handleInputUpdate(e, "last_name")}
+            disabled={postLoading}
           />
         </RowInput>
         {newContact.phones.map((phone, index) => (
@@ -87,17 +126,21 @@ const AddContact = () => {
               placeholder="phone number"
               value={phone.number}
               onChange={(e) => handlePhoneChange(e, index)}
+              disabled={postLoading}
             />
-            <ActionButton danger onClick={(e) => handleRemovePhone(e, index)}>
-              delete
-            </ActionButton>
+            {newContact.phones.length > 1 && index !== 0 ? (
+              <ActionButton danger onClick={(e) => handleRemovePhone(e, index)}>
+                delete
+              </ActionButton>
+            ) : null}
           </RowInput>
         ))}
         <ActionButton primary onClick={handleAddPhone}>
           Add Other Phone
         </ActionButton>
         <RowInput footer>
-          <ActionButton thumbnail onClick={handleSave}>
+          {message?.text ? <MessageInfo type={message.type}>{message.text}</MessageInfo> : null}
+          <ActionButton thumbnail onClick={handleSave} disabled={postLoading}>
             SAVE
           </ActionButton>
         </RowInput>

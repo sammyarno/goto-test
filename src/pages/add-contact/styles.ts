@@ -15,7 +15,7 @@ export const Input = styled.input`
 export const RowInput = styled.div<RowInputProps>`
   margin: 1rem 0;
 
-  ${(props) => `${props.footer ? "display: flex; justify-content: flex-end; gap: .5rem;" : ""}`}
+  ${(props) => `${props.footer ? "display: flex; align-items: center; justify-content: flex-end; gap: .5rem;" : ""}`}
 `;
 
 export const Title = styled.h3`
