@@ -13,6 +13,7 @@ const Navbar = styled.div`
 const logoStyle = css`
   text-transform: uppercase;
   letter-spacing: 2px;
+  cursor: pointer;
 `;
 
 const NavigationBar = () => {

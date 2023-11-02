@@ -4,9 +4,21 @@ import { ActionButton, Container } from "../shared";
 import { useContact } from "../../contexts/contact";
 import { Contact, PaginationButton, PaginationContainer, contactNameStyle, contactPhoneStyle } from "./styles";
 import Filter from "../filter";
+import { CustomContact } from "../../contexts/types";
+import { useNavigate } from "react-router-dom";
 
 const ContactList = () => {
-  const { getContacts, contacts, getLoading, handlePagination, params, deleteContact, deleteLoading } = useContact();
+  const navigate = useNavigate();
+  const {
+    getContacts,
+    contacts,
+    getLoading,
+    handlePagination,
+    params,
+    deleteContact,
+    deleteLoading,
+    handleSelectContact,
+  } = useContact();
 
   const handlePaginationChange = (e: MouseEvent<HTMLButtonElement>, type = "") => {
     e.preventDefault();
@@ -18,6 +30,12 @@ const ContactList = () => {
       ...params,
       where,
     });
+  };
+
+  const handleEditContact = (e: MouseEvent<HTMLButtonElement>, contact: CustomContact) => {
+    e.preventDefault();
+    handleSelectContact(contact);
+    navigate("/edit");
   };
 
   const handleDeleteContact = (e: MouseEvent<HTMLButtonElement>, id: string) => {
@@ -63,7 +81,7 @@ const ContactList = () => {
               <div>
                 <p css={contactNameStyle}>{`${contact.first_name} ${contact.last_name}`}</p>
                 <p css={contactPhoneStyle}>{contact.phones.map((phone) => phone.number).join(" / ")}</p>
-                <ActionButton primary disabled={actionLoading}>
+                <ActionButton primary disabled={actionLoading} onClick={(e) => handleEditContact(e, contact)}>
                   edit
                 </ActionButton>
                 <ActionButton danger disabled={actionLoading} onClick={(e) => handleDeleteContact(e, `${contact.id}`)}>

@@ -86,6 +86,8 @@ const AddContact = () => {
       }));
 
       setNewContact({ ...defaultNewContact });
+    } else {
+      setMessage({ ...defaultMessage });
     }
   }, [addContactResponse]);
 

@@ -1,9 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { OperationVariables, useLazyQuery, useMutation } from "@apollo/client";
-import { ADD_CONTACT, DELETE_CONTACT, GET_CONTACT_LIST } from "../utils/queries";
+import { ADD_CONTACT, DELETE_CONTACT, GET_CONTACT_LIST, UPDATE_CONTACT } from "../utils/queries";
 import { Params } from "../models/request";
 import { ContactContextType, ContactListResponse, CustomContact, Props } from "./types";
 import { NewContact } from "../pages/add-contact/types";
+import { Contact } from "../models/contact";
 
 export const ContactContext = createContext<ContactContextType | null>(null);
 
@@ -25,6 +26,7 @@ const defaultParams: Params = {
 
 const ContactProvider = (props: Props) => {
   const { children } = props;
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [params, setParams] = useState<Params>(defaultParams);
   const [contacts, setContacts] = useState<CustomContact[]>([]);
   const [getContacts, { loading: getLoading, data, refetch: refetchContacts }] = useLazyQuery<
@@ -36,6 +38,10 @@ const ContactProvider = (props: Props) => {
     { data: addContactResponse, loading: postLoading, error: addContactError, reset: addContactReset },
   ] = useMutation(ADD_CONTACT);
   const [deleteContact, { loading: deleteLoading }] = useMutation(DELETE_CONTACT);
+  const [
+    updateContact,
+    { data: updateContactResponse, loading: updateLoading, error: updateContactError, reset: updateContactReset },
+  ] = useMutation(UPDATE_CONTACT);
 
   const handlePagination = (type = "") => {
     let newOffset = 0;
@@ -101,6 +107,21 @@ const ContactProvider = (props: Props) => {
     });
   };
 
+  const handleUpdateContact = (id: string, contact: NewContact) => {
+    updateContact({
+      variables: {
+        id,
+        _set: {
+          first_name: contact.first_name,
+          last_name: contact.last_name,
+          // phones: contact.phones,
+        },
+      },
+    });
+  };
+
+  const handleSelectContact = (contact: Contact) => setSelectedContact(contact);
+
   useEffect(() => {
     if (data?.contact) {
       const tempContacts = data.contact.map((x) => ({
@@ -125,6 +146,13 @@ const ContactProvider = (props: Props) => {
     addContactReset,
     deleteContact: handleDeleteContact,
     deleteLoading,
+    updateContact: handleUpdateContact,
+    updateLoading,
+    updateContactResponse,
+    updateContactReset,
+    updateContactError,
+    selectedContact,
+    handleSelectContact,
   };
 
   return <ContactContext.Provider value={value}>{children}</ContactContext.Provider>;

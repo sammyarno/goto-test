@@ -16,6 +16,13 @@ export type ContactContextType = {
   addContactReset: () => void;
   deleteContact: (id: string) => void;
   deleteLoading: boolean;
+  updateContact: (id: string, contact: NewContact) => void;
+  updateLoading: boolean;
+  updateContactResponse: unknown;
+  updateContactError: ApolloError | undefined;
+  updateContactReset: () => void;
+  selectedContact: Contact | null;
+  handleSelectContact: (contact: Contact) => void;
 };
 
 export type CustomContact = Contact & {
