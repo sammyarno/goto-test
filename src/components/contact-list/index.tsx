@@ -1,12 +1,16 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { Container } from "../shared";
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import { MouseEvent, useEffect, useState } from "react";
+import { OperationVariables, useLazyQuery } from "@apollo/client";
+import { Container } from "../shared";
+import { GET_CONTACT_LIST } from "../../utils/queries";
 
 type ContactActionButtonProps = {
   danger?: boolean;
   primary?: boolean;
-  info?: boolean;
+  favorite?: boolean;
+  regular?: boolean;
 };
 
 const Contact = styled.div`
@@ -50,7 +54,9 @@ const ContactActionButton = styled.button<ContactActionButtonProps>`
 
   ${(props) => `${props.primary ? "border: 1px solid var(--primary); color: var(--primary);" : ""}`}
   ${(props) => `${props.danger ? "border: 1px solid rgba(189, 42, 54); color: rgba(189, 42, 54);" : ""}`}
-  ${(props) => `${props.info ? "border: 1px solid rgba(204, 186, 49); color: rgba(204, 186, 49);" : ""}`}
+  
+  ${(props) => `${props.favorite ? "border: 1px solid rgba(44, 150, 171); color: rgba(44, 150, 171);" : ""}`}
+  ${(props) => `${props.regular ? "border: 1px solid dimgray; color: dimgray;" : ""}`}
 
   :not(:last-child) {
     margin-right: 1rem;
@@ -68,43 +74,110 @@ const contactPhoneStyle = css`
   margin-bottom: 1rem;
 `;
 
+const defaultParams = {
+  offset: 0,
+  limit: 10,
+};
+
+interface ContactPhone {
+  id: number;
+  contact_id: string;
+  created_ad: string;
+  number: string;
+}
+
+interface Contact {
+  id: number;
+  first_name: string;
+  last_name: string;
+  created_at: string;
+  updated_at: string;
+  phones: ContactPhone[];
+}
+
+interface ContactList {
+  contact: Contact[];
+}
+
 const ContactList = () => {
-  return (
-    <Container padded>
-      <Container>
-        {Array.from(Array(5).keys()).map((val) => (
-          <Contact key={val}>
-            <div>
-              <p css={contactNameStyle}>{val}</p>
-              <p css={contactPhoneStyle}>087788030036</p>
-              <ContactActionButton primary>edit</ContactActionButton>
-              <ContactActionButton danger>delete</ContactActionButton>
-            </div>
-            <div>
-              <ContactActionButton info>favorite</ContactActionButton>
-            </div>
-          </Contact>
-        ))}
-        {Array.from(Array(5).keys()).map((val) => (
-          <Contact key={val}>
-            <div>
-              <p css={contactNameStyle}>{val}</p>
-              <p css={contactPhoneStyle}>087788030036</p>
-              <ContactActionButton primary>edit</ContactActionButton>
-              <ContactActionButton danger>delete</ContactActionButton>
-            </div>
-            {/* <div>
-              <ContactActionButton info>regular</ContactActionButton>
-            </div> */}
-          </Contact>
-        ))}
+  const [params, setParams] = useState(defaultParams);
+  const [getContacts, { loading, data }] = useLazyQuery<ContactList, OperationVariables>(GET_CONTACT_LIST, {
+    variables: params,
+  });
+
+  useEffect(() => {
+    getContacts();
+  }, []);
+
+  const handlePagination = (e: MouseEvent<HTMLButtonElement>, type = "") => {
+    e.preventDefault();
+    let newOffset = 0;
+
+    switch (type) {
+      case "NEXT":
+        newOffset = params.offset + params.limit;
+        break;
+      case "PREV":
+        newOffset = params.offset - params.limit;
+
+        if (newOffset < 0) {
+          newOffset = 0;
+        }
+        break;
+      default:
+        break;
+    }
+
+    setParams((prev) => ({
+      ...prev,
+      offset: newOffset,
+    }));
+  };
+
+  if (loading) return <h2>Loading your data...</h2>;
+
+  if (data)
+    return (
+      <Container padded>
+        <Container>
+          {/* FAV CONTACTS */}
+          {/* {Array.from(Array(5).keys()).map((val) => (
+            <Contact key={val}>
+              <div>
+                <p css={contactNameStyle}>{val}</p>
+                <p css={contactPhoneStyle}>087788030036</p>
+                <ContactActionButton primary>edit</ContactActionButton>
+                <ContactActionButton danger>delete</ContactActionButton>
+              </div>
+              <div>
+                <ContactActionButton favorite>favorite</ContactActionButton>
+              </div>
+            </Contact>
+          ))} */}
+          {data.contact.map((contact) => (
+            <Contact key={contact.id}>
+              <div>
+                <p css={contactNameStyle}>{`${contact.first_name} ${contact.last_name}`}</p>
+                <p css={contactPhoneStyle}>{contact.phones[0].number}</p>
+                <ContactActionButton primary>edit</ContactActionButton>
+                <ContactActionButton danger>delete</ContactActionButton>
+              </div>
+              <div>
+                <ContactActionButton regular>regular</ContactActionButton>
+              </div>
+            </Contact>
+          ))}
+        </Container>
+        <PaginationContainer>
+          <PaginationButton disabled onClick={(e) => handlePagination(e, "PREV")}>
+            prev
+          </PaginationButton>
+          <PaginationButton onClick={(e) => handlePagination(e, "NEXT")}>next</PaginationButton>
+        </PaginationContainer>
       </Container>
-      <PaginationContainer>
-        <PaginationButton disabled>prev</PaginationButton>
-        <PaginationButton>next</PaginationButton>
-      </PaginationContainer>
-    </Container>
-  );
+    );
+
+  return <></>;
 };
 
 export default ContactList;
