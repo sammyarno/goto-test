@@ -98,7 +98,7 @@ const ContactList = () => {
                 <ActionButton danger>delete</ActionButton>
               </div>
               <div>
-                <ActionButton regular>regular</ActionButton>
+                <ActionButton secondary>regular</ActionButton>
               </div>
             </Contact>
           ))}

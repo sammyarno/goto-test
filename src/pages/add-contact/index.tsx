@@ -5,6 +5,7 @@ import { NewContact } from "./types";
 import { Input, RowInput, Title } from "./styles";
 import { useContact } from "../../contexts/contact";
 import { Message } from "../../models";
+import { useNavigate } from "react-router-dom";
 
 const defaultPhone = {
   number: "",
@@ -22,6 +23,7 @@ const defaultMessage: Message = {
 };
 
 const AddContact = () => {
+  const navigate = useNavigate();
   const [newContact, setNewContact] = useState(defaultNewContact);
   const [message, setMessage] = useState(defaultMessage);
   const { postLoading, addContact, addContactError, addContactReset, addContactResponse } = useContact();
@@ -140,6 +142,9 @@ const AddContact = () => {
         </ActionButton>
         <RowInput footer>
           {message?.text ? <MessageInfo type={message.type}>{message.text}</MessageInfo> : null}
+          <ActionButton secondary onClick={() => navigate(-1)} disabled={postLoading}>
+            BACK
+          </ActionButton>
           <ActionButton thumbnail onClick={handleSave} disabled={postLoading}>
             SAVE
           </ActionButton>

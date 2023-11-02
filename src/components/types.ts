@@ -1,9 +1,8 @@
 export type ActionButtonProps = {
   danger?: boolean;
   primary?: boolean;
-  favorite?: boolean;
-  regular?: boolean;
   thumbnail?: boolean;
+  secondary?: boolean;
 };
 
 export type ContainerProps = {

@@ -39,10 +39,8 @@ export const ActionButton = styled.button<ActionButtonProps>`
   cursor: pointer;
 
   ${(props) => `${props.primary ? "border: 1px solid var(--primary); color: var(--primary);" : ""}`}
+  ${(props) => `${props.secondary ? "border: 1px solid dimgray; color: dimgray;" : ""}`}
   ${(props) => `${props.danger ? "border: 1px solid rgba(189, 42, 54); color: rgba(189, 42, 54);" : ""}`}
-  
-  ${(props) => `${props.favorite ? "border: 1px solid rgba(44, 150, 171); color: rgba(44, 150, 171);" : ""}`}
-  ${(props) => `${props.regular ? "border: 1px solid dimgray; color: dimgray;" : ""}`}
 
   ${(props) =>
     `${props.thumbnail ? `text-transform: uppercase;background-color: var(--primary);font-weight: bold;` : ""}`}
