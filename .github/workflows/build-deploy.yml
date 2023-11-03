@@ -20,6 +20,10 @@ jobs:
         with:
           node-version: 16.x
 
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
       - name: Installing NPM packages
         run: pnpm ci
 
