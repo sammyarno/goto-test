@@ -3,10 +3,24 @@ import { css } from "@emotion/react";
 
 export const Contact = styled.div`
   border-bottom: 1px solid gray;
-  padding: 1rem;
+  padding: 1rem 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  div:first-child {
+    width: 80%;
+  }
+
+  @media (max-width: 576px) {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    div:first-child {
+      width: 100%;
+    }
+  }
 `;
 
 export const PaginationContainer = styled.div`
@@ -40,8 +54,5 @@ export const contactNameStyle = css`
 
 export const contactPhoneStyle = css`
   margin-bottom: 1rem;
-
-  @media (max-width: 576px) {
-    max-width: 75%;
-  }
+  overflow-wrap: break-word;
 `;

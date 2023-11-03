@@ -3,6 +3,7 @@ export type ActionButtonProps = {
   primary?: boolean;
   thumbnail?: boolean;
   secondary?: boolean;
+  small?: boolean;
 };
 
 export type ContainerProps = {
@@ -13,4 +14,8 @@ export type ContainerProps = {
 
 export type MessageInfoProps = {
   type: "SUCCESS" | "DANGER";
+};
+
+export type RowInputProps = {
+  footer?: boolean;
 };

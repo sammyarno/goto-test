@@ -5,7 +5,3 @@ export type NewContact = {
     number: string;
   }[];
 };
-
-export type RowInputProps = {
-  footer?: boolean;
-};

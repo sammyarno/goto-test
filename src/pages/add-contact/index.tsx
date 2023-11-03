@@ -2,7 +2,7 @@ import NavigationBar from "../../components/navigation-bar";
 import { ActionButton, Container, MessageInfo } from "../../components/shared";
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { NewContact } from "./types";
-import { Input, RowInput, Title } from "./styles";
+import { Input, RowInput, Title } from "../../components/shared";
 import { useContact } from "../../contexts/contact";
 import { Message } from "../../models";
 import { useNavigate } from "react-router-dom";
@@ -139,17 +139,21 @@ const AddContact = () => {
             ) : null}
           </RowInput>
         ))}
-        <ActionButton primary onClick={handleAddPhone}>
-          Add Other Phone
-        </ActionButton>
+        <RowInput>
+          <ActionButton primary onClick={handleAddPhone}>
+            Add Other Phone
+          </ActionButton>
+        </RowInput>
         <RowInput footer>
           {message?.text ? <MessageInfo type={message.type}>{message.text}</MessageInfo> : null}
-          <ActionButton secondary onClick={() => navigate(-1)} disabled={postLoading}>
-            BACK
-          </ActionButton>
-          <ActionButton thumbnail onClick={handleSave} disabled={postLoading}>
-            SAVE
-          </ActionButton>
+          <div>
+            <ActionButton secondary onClick={() => navigate(-1)} disabled={postLoading}>
+              BACK
+            </ActionButton>
+            <ActionButton thumbnail onClick={handleSave} disabled={postLoading}>
+              SAVE
+            </ActionButton>
+          </div>
         </RowInput>
       </Container>
     </Container>

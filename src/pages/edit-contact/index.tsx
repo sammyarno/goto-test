@@ -2,7 +2,7 @@ import NavigationBar from "../../components/navigation-bar";
 import { ActionButton, Container, MessageInfo } from "../../components/shared";
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { NewContact } from "./types";
-import { Input, RowInput, Title } from "./styles";
+import { Input, RowInput, Title } from "../../components/shared";
 import { useContact } from "../../contexts/contact";
 import { Message } from "../../models";
 import { useNavigate, Navigate } from "react-router-dom";
@@ -91,8 +91,6 @@ const EditContact = () => {
     return <Navigate to="/" replace={true} />;
   }
 
-  console.log("response", updateContactResponse);
-
   return (
     <Container className="app">
       <NavigationBar />
@@ -122,12 +120,14 @@ const EditContact = () => {
         ))}
         <RowInput footer>
           {message?.text ? <MessageInfo type={message.type}>{message.text}</MessageInfo> : null}
-          <ActionButton secondary onClick={() => navigate(-1)} disabled={updateLoading}>
-            BACK
-          </ActionButton>
-          <ActionButton thumbnail onClick={handleSave} disabled={updateLoading}>
-            SAVE
-          </ActionButton>
+          <div>
+            <ActionButton secondary onClick={() => navigate(-1)} disabled={updateLoading}>
+              BACK
+            </ActionButton>
+            <ActionButton thumbnail onClick={handleSave} disabled={updateLoading}>
+              SAVE
+            </ActionButton>
+          </div>
         </RowInput>
       </Container>
     </Container>

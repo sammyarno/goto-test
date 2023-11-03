@@ -2,7 +2,7 @@
 import { MouseEvent } from "react";
 import { useContact } from "../../contexts/contact";
 import { CustomContact } from "../../contexts/types";
-import { ActionButton } from "../shared";
+import { ActionButton, RowInput } from "../shared";
 import { Contact, contactNameStyle, contactPhoneStyle } from "./styles";
 
 type Props = {
@@ -22,16 +22,16 @@ const Item = (props: Props) => {
       <div>
         <p css={contactNameStyle}>{`${contact.first_name} ${contact.last_name}`}</p>
         <p css={contactPhoneStyle}>{contact.phones.map((phone) => phone.number).join(" / ")}</p>
-        <ActionButton primary disabled={actionLoading} onClick={(e) => onEdit(e, contact)}>
-          edit
-        </ActionButton>
-        <ActionButton danger disabled={actionLoading} onClick={(e) => onDelete(e, `${contact.id}`)}>
-          delete
-        </ActionButton>
+        <RowInput>
+          <ActionButton danger disabled={actionLoading} onClick={(e) => onDelete(e, `${contact.id}`)}>
+            delete
+          </ActionButton>
+          <ActionButton primary disabled={actionLoading} onClick={(e) => onEdit(e, contact)}>
+            edit
+          </ActionButton>
+        </RowInput>
       </div>
-      <div>
-        <ActionButton secondary>regular</ActionButton>
-      </div>
+      <ActionButton secondary>regular</ActionButton>
     </Contact>
   );
 };

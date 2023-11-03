@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ActionButtonProps, ContainerProps, MessageInfoProps } from "./types";
+import { ActionButtonProps, ContainerProps, MessageInfoProps, RowInputProps } from "./types";
 
 export const Container = styled.div<ContainerProps>`
   @media (max-width: 576px) {
@@ -48,6 +48,18 @@ export const ActionButton = styled.button<ActionButtonProps>`
   :not(:last-child) {
     margin-right: 1rem;
   }
+
+  @media (max-width: 576px) {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0;
+
+    ${(props) => `${props.small ? "width: auto;" : ""}`}
+
+    :not(:last-child) {
+      margin-right: 0.5rem;
+    }
+  }
 `;
 
 export const MessageInfo = styled.span<MessageInfoProps>`
@@ -76,4 +88,71 @@ export const MessageInfo = styled.span<MessageInfoProps>`
   `
         : ""
     }`};
+
+  @media (max-width: 576px) {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+`;
+
+export const Input = styled.input`
+  margin-right: 1rem;
+  padding: 0.25rem 0.75rem;
+  border: none;
+  border-radius: 0.25rem;
+  width: 300px;
+
+  :focus {
+    outline: none;
+  }
+
+  :disabled {
+    color: white;
+  }
+
+  @media (max-width: 576px) {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+
+    padding: 0.75rem;
+  }
+`;
+
+export const RowInput = styled.div<RowInputProps>`
+  margin: 1rem 0;
+
+  ${(props) =>
+    `${
+      props.footer
+        ? `
+    display: flex; 
+    align-items: center; 
+    justify-content: flex-end; 
+    gap: .5rem;
+
+    @media (max-width: 576px) {
+      flex-direction: column;
+
+      div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+    }
+  `
+        : ""
+    }`}
+
+  @media (max-width: 576px) {
+    margin: 0.75rm 0;
+    padding: 0 0.5rem;
+    width: 100%;
+  }
+`;
+
+export const Title = styled.h3`
+  margin-bottom: 0.75rem;
 `;
