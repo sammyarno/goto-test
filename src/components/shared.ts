@@ -41,6 +41,7 @@ export const ActionButton = styled.button<ActionButtonProps>`
   ${(props) => `${props.primary ? "border: 1px solid var(--primary); color: var(--primary);" : ""}`}
   ${(props) => `${props.secondary ? "border: 1px solid dimgray; color: dimgray;" : ""}`}
   ${(props) => `${props.danger ? "border: 1px solid rgba(189, 42, 54); color: rgba(189, 42, 54);" : ""}`}
+  ${(props) => `${props.info ? "border: 1px solid rgba(240, 212, 74); color: rgba(240, 212, 74);" : ""}`}
 
   ${(props) =>
     `${props.thumbnail ? `text-transform: uppercase;background-color: var(--primary);font-weight: bold;` : ""}`}

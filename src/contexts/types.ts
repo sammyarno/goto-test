@@ -23,6 +23,7 @@ export type ContactContextType = {
   updateContactReset: () => void;
   selectedContact: Contact | null;
   handleSelectContact: (contact: Contact) => void;
+  handleToogleFavorite: (id: string) => void;
 };
 
 export type CustomContact = Contact & {

@@ -9,10 +9,11 @@ type Props = {
   contact: CustomContact;
   onEdit: (e: MouseEvent<HTMLButtonElement>, contact: CustomContact) => void;
   onDelete: (e: MouseEvent<HTMLButtonElement>, id: string) => void;
+  onFavorite: (e: MouseEvent<HTMLButtonElement>, id: string) => void;
 };
 
 const Item = (props: Props) => {
-  const { contact, onDelete, onEdit } = props;
+  const { contact, onDelete, onEdit, onFavorite } = props;
   const { deleteLoading } = useContact();
 
   const actionLoading = deleteLoading;
@@ -31,7 +32,9 @@ const Item = (props: Props) => {
           </ActionButton>
         </RowInput>
       </div>
-      <ActionButton secondary>regular</ActionButton>
+      <ActionButton secondary={!contact.isFav} info={contact.isFav} onClick={(e) => onFavorite(e, `${contact.id}`)}>
+        {contact.isFav ? "Favorite" : "Regular"}
+      </ActionButton>
     </Contact>
   );
 };

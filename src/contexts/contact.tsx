@@ -122,12 +122,39 @@ const ContactProvider = (props: Props) => {
 
   const handleSelectContact = (contact: Contact) => setSelectedContact(contact);
 
+  const handleToogleFavorite = (id: string) => {
+    const tempContacts = contacts
+      .map((item) => {
+        const temp = item;
+
+        if (`${temp.id}` === id) {
+          temp.isFav = !item.isFav;
+        }
+
+        return temp;
+      })
+      .sort((a, b) => Number(b.isFav) - Number(a.isFav));
+
+    localStorage.setItem(
+      "favIds",
+      tempContacts
+        .filter((x) => x.isFav)
+        .map((x) => x.id)
+        .join(","),
+    );
+
+    setContacts([...tempContacts]);
+  };
+
   useEffect(() => {
     if (data?.contact) {
-      const tempContacts = data.contact.map((x) => ({
-        ...x,
-        isFav: false,
-      }));
+      const favIds = localStorage.getItem("favIds")?.split(",") || [];
+
+      const tempContacts = data.contact
+        .map((contact) => {
+          return { ...contact, isFav: favIds.includes(`${contact.id}`) };
+        })
+        .sort((a, b) => Number(b.isFav) - Number(a.isFav));
 
       setContacts([...tempContacts]);
     }
@@ -153,6 +180,7 @@ const ContactProvider = (props: Props) => {
     updateContactError,
     selectedContact,
     handleSelectContact,
+    handleToogleFavorite,
   };
 
   return <ContactContext.Provider value={value}>{children}</ContactContext.Provider>;

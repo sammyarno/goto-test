@@ -10,8 +10,16 @@ import Item from "./item";
 
 const ContactList = () => {
   const navigate = useNavigate();
-  const { getContacts, contacts, getLoading, handlePagination, params, deleteContact, handleSelectContact } =
-    useContact();
+  const {
+    getContacts,
+    contacts,
+    getLoading,
+    handlePagination,
+    params,
+    deleteContact,
+    handleSelectContact,
+    handleToogleFavorite,
+  } = useContact();
 
   const handlePaginationChange = (e: MouseEvent<HTMLButtonElement>, type = "") => {
     e.preventDefault();
@@ -34,6 +42,11 @@ const ContactList = () => {
   const handleDeleteContact = (e: MouseEvent<HTMLButtonElement>, id: string) => {
     e.preventDefault();
     deleteContact(id);
+  };
+
+  const handleFavoriteContact = (e: MouseEvent<HTMLButtonElement>, id: string) => {
+    e.preventDefault();
+    handleToogleFavorite(id);
   };
 
   useEffect(() => {
@@ -73,6 +86,7 @@ const ContactList = () => {
               contact={contact}
               onEdit={handleEditContact}
               onDelete={handleDeleteContact}
+              onFavorite={handleFavoriteContact}
             />
           ))}
         </Container>

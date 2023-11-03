@@ -1,8 +1,9 @@
 export type ActionButtonProps = {
-  danger?: boolean;
   primary?: boolean;
-  thumbnail?: boolean;
   secondary?: boolean;
+  danger?: boolean;
+  info?: boolean;
+  thumbnail?: boolean;
   small?: boolean;
 };
 
