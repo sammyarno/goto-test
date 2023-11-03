@@ -5,6 +5,10 @@ export const InputContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 576px) {
+    margin-bottom: 1rem;
+  }
 `;
 
 export const SearchInput = styled.input`
@@ -22,4 +26,8 @@ export const containerStyle = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+  }
 `;

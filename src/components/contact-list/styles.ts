@@ -40,4 +40,8 @@ export const contactNameStyle = css`
 
 export const contactPhoneStyle = css`
   margin-bottom: 1rem;
+
+  @media (max-width: 576px) {
+    max-width: 75%;
+  }
 `;

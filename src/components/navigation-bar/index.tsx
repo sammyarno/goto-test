@@ -1,20 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import styled from "@emotion/styled";
-import { css } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
-
-const Navbar = styled.div`
-  border-bottom: 1px solid var(--accent);
-  padding: 1.5rem 0;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const logoStyle = css`
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  cursor: pointer;
-`;
+import { Navbar, logoStyle } from "./styles";
 
 const NavigationBar = () => {
   const navigate = useNavigate();
