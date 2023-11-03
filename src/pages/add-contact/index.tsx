@@ -65,11 +65,39 @@ const AddContact = () => {
     }));
   };
 
-  const handleSave = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleSave = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    let valid = true;
+    let message = "";
 
-    if (newContact.first_name && newContact.last_name && newContact.phones.length > 0) {
-      await addContact(newContact);
+    setMessage((prev) => ({
+      ...prev,
+      text: message,
+      type: "DANGER",
+    }));
+
+    // check first name and last name
+    if (!newContact.first_name || !newContact.last_name) {
+      message = "First and last name must be filled";
+    } else {
+      const alphanumericRegex = new RegExp("^\\w+$");
+
+      console.log(newContact.first_name, alphanumericRegex.test(newContact.first_name));
+
+      if (!alphanumericRegex.test(newContact.first_name) || !alphanumericRegex.test(newContact.last_name)) {
+        valid = false;
+        message = "Name must be alphanumeric characters only";
+      }
+    }
+
+    if (valid) {
+      addContact(newContact);
+    } else {
+      setMessage((prev) => ({
+        ...prev,
+        text: message,
+        type: "DANGER",
+      }));
     }
   };
 

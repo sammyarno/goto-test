@@ -8,7 +8,7 @@ export const Contact = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  div:first-child {
+  div:first-of-type {
     width: 80%;
   }
 
@@ -17,7 +17,7 @@ export const Contact = styled.div`
     flex-direction: column;
     gap: 0.75rem;
 
-    div:first-child {
+    div:first-of-type {
       width: 100%;
     }
   }
