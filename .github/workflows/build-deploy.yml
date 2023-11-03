@@ -25,7 +25,7 @@ jobs:
           version: 8
 
       - name: Installing NPM packages
-        run: pnpm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Building project
         run: npm run build
