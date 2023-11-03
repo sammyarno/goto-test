@@ -1,24 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { MouseEvent, useEffect } from "react";
-import { ActionButton, Container } from "../shared";
+import { Container } from "../shared";
 import { useContact } from "../../contexts/contact";
-import { Contact, PaginationButton, PaginationContainer, contactNameStyle, contactPhoneStyle } from "./styles";
+import { PaginationButton, PaginationContainer } from "./styles";
 import Filter from "../filter";
 import { CustomContact } from "../../contexts/types";
 import { useNavigate } from "react-router-dom";
+import Item from "./item";
 
 const ContactList = () => {
   const navigate = useNavigate();
-  const {
-    getContacts,
-    contacts,
-    getLoading,
-    handlePagination,
-    params,
-    deleteContact,
-    deleteLoading,
-    handleSelectContact,
-  } = useContact();
+  const { getContacts, contacts, getLoading, handlePagination, params, deleteContact, handleSelectContact } =
+    useContact();
 
   const handlePaginationChange = (e: MouseEvent<HTMLButtonElement>, type = "") => {
     e.preventDefault();
@@ -55,8 +48,6 @@ const ContactList = () => {
     );
   }
 
-  const actionLoading = deleteLoading;
-
   if (contacts) {
     return (
       <Container padded>
@@ -77,21 +68,12 @@ const ContactList = () => {
             </Contact>
           ))} */}
           {contacts.map((contact, index) => (
-            <Contact key={`${contact.id}|${index}`}>
-              <div>
-                <p css={contactNameStyle}>{`${contact.first_name} ${contact.last_name}`}</p>
-                <p css={contactPhoneStyle}>{contact.phones.map((phone) => phone.number).join(" / ")}</p>
-                <ActionButton primary disabled={actionLoading} onClick={(e) => handleEditContact(e, contact)}>
-                  edit
-                </ActionButton>
-                <ActionButton danger disabled={actionLoading} onClick={(e) => handleDeleteContact(e, `${contact.id}`)}>
-                  delete
-                </ActionButton>
-              </div>
-              <div>
-                <ActionButton secondary>regular</ActionButton>
-              </div>
-            </Contact>
+            <Item
+              key={`${contact.id}|${index}`}
+              contact={contact}
+              onEdit={handleEditContact}
+              onDelete={handleDeleteContact}
+            />
           ))}
         </Container>
         <PaginationContainer>
