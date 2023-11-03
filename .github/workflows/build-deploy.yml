@@ -21,7 +21,7 @@ jobs:
           node-version: 16.x
 
       - name: Installing NPM packages
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Building project
         run: npm run build
